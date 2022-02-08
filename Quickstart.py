@@ -41,6 +41,8 @@ class NeuralNetwork(nn.Module):
     
     
 model = NeuralNetwork().to(device)
+model.load_state_dict(torch.load("model.pth"))
+
 print(model)
 
 loss_fn = nn.CrossEntropyLoss()
@@ -93,5 +95,5 @@ print("경과 시간 :", end - start )
 
 
 
-torch.save(model.state_dic(), "model.pth")
+torch.save(model.state_dict(), "model.pth")
 print("Saved pyTorch Model State to model.pth")
