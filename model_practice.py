@@ -35,8 +35,14 @@ print(model)
 # pred_probab = nn.Softmax(dim=1)(logits)
 # y_pred = pred_probab.argmax(1)
 # print(f"Predicted class:{y_pred}")
+
+
+
 flatten = nn.Flatten()
 input_image = torch.rand(3,28,28)
+
+
+
 # print(input_image.size())
 flat_image = flatten(input_image)
 # print(flat_image)
