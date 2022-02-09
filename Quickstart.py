@@ -98,3 +98,4 @@ print("경과 시간 :", end - start )
 
 # torch.save(model.state_dict(), "model.pth")
 # print("Saved pyTorch Model State to model.pth")
+# 실험2222
