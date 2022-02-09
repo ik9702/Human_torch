@@ -41,7 +41,7 @@ class NeuralNetwork(nn.Module):
     
     
 model = NeuralNetwork().to(device)
-model.load_state_dict(torch.load("model.pth"))
+# model.load_state_dict(torch.load("model.pth"))
 
 print(model)
 
@@ -71,7 +71,7 @@ def test(dataloader, model, loss_fn):
     model.eval()
     test_loss, correct = 0, 0
     with torch.no_grad():
-        for X, y, in dataloader:
+        for X, y in dataloader:
             X, y = X.to(device), y.to(device)
             pred = model(X)
             test_loss += loss_fn(pred, y).item()
@@ -89,11 +89,12 @@ for t in range(epochs):
     print(f"Epoch {t+1}\n----------------------------------")
     train(train_dataloader, model, loss_fn, optimizer)
     test(test_dataloader, model, loss_fn)
-end = time.time()
+
 print("done!")
+end = time.time()
 print("경과 시간 :", end - start )
 
 
 
-torch.save(model.state_dict(), "model.pth")
-print("Saved pyTorch Model State to model.pth")
+# torch.save(model.state_dict(), "model.pth")
+# print("Saved pyTorch Model State to model.pth")
