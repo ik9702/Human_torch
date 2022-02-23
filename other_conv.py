@@ -3,50 +3,56 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
-
 import matplotlib.pyplot as plt
 
 
 class DeptwiseConv(nn.Module):
-    def __init__(self, nin, kernel_size):
+    def __init__(self, nin, kernel_size,stri, pad):
         super(DeptwiseConv, self).__init__()
-        self.deptwise = nn.Conv2d(nin, nin, kernel_size, groups = nin)
+        self.deptwise = nn.Conv2d(nin, nin, kernel_size,stride=stri, padding=pad, groups=nin)
         
 class PointwiseConv(nn.Module):
     def __init__(self, nin):
         super(PointwiseConv, self).__init__()
         self.pointwise = nn.Conv2d(nin, 1, 1)
 
-indata = datasets.FashionMNIST(root='data', train = True, download=True, transform=ToTensor())
-indata_loader = DataLoader(indata, batch_size=1)
+indata = datasets.FashionMNIST(root='data', train = False, download=True, transform=ToTensor())
+indata_loader = DataLoader(indata, batch_size=1, shuffle=True)
 train_features, train_labels = next(iter(indata_loader))
 
-print(train_features)
+kernel_size = 8
+pad = 5
+stri = 4
+DC = DeptwiseConv(1, kernel_size,stri, pad)
+trans = nn.ConvTranspose2d(1, 1, kernel_size,stride = stri, padding = pad)
 
-# DC = DeptwiseConv(1, 5)
-# trans = nn.ConvTranspose2d(1, 1, 5)
+x = DC.deptwise(train_features)
+y = trans(x)
 
-# x = DC(train_features)
-# y = trans(x)
+x_t = torch.tensor(x)
+y_t = torch.tensor(y)
+
+img1 = train_features[0].squeeze()
+plt.figure(figsize=(9, 3))
+plt.subplot(1, 3, 1)
+plt.imshow(img1, cmap="gray")
+plt.title(train_features.size())
+
+img2 = x_t[0].squeeze()
+plt.subplot(1, 3, 2)
+plt.imshow(img2, cmap="gray")
+plt.title(x_t.size())
+
+img3 = y_t[0].squeeze()
+plt.subplot(1, 3, 3)
+plt.title(y_t.size())
+plt.imshow(img3, cmap="gray")
+plt.show()
 
 
-# after_conv = DC(Fin)
-# after_trans = trans(after_conv)
 
 
-# figure = plt.figure(figsize=(8,4))
-# cols, rows = 3, 3
-
-# img, label = indata[sample_index]
-# figure.add_subplot(rows, cols, 1)
-
-# plt.axis("off")
-# plt.imshow(img.squeeze(), cmap="gray")
-# plt.show()
-
-
-
-
+ 
 
 
 
